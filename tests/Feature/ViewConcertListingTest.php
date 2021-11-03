@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Concert;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
