@@ -22,4 +22,9 @@ class Concert extends Model
     {
         return $this->date->format('g:ia');
     }
+
+    public function getTicketPriceInDollarsAttribute()
+    {
+        return number_format($this->ticket_price / 100, 2);
+    }
 }
