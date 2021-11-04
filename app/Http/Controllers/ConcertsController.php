@@ -9,7 +9,7 @@ class ConcertsController extends Controller
 {
     public function show($id)
     {
-        $concert = Concert::query()->findOrFail($id);
+        $concert = Concert::query()->whereNotNull('published_at')->findOrFail($id);
         return view('concerts.show', compact('concert'));
     }
 }
