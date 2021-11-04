@@ -27,4 +27,9 @@ class Concert extends Model
     {
         return number_format($this->ticket_price / 100, 2);
     }
+
+    public function scopePublished($query)
+    {
+        $query->whereNotNull('published_at');
+    }
 }
