@@ -17,8 +17,7 @@ class TicketTest extends TestCase
      */
     public function a_ticket_can_be_released()
     {
-        $concert = Concert::factory()->create();
-        $concert->addTickets(1);
+        $concert = Concert::factory()->create()->addTickets(1);
         $order = $concert->orderTickets('jane.example.com', 1);
 
         $ticket = $order->tickets()->first();
