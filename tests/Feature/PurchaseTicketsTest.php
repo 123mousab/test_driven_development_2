@@ -41,11 +41,21 @@ class PurchaseTicketsTest extends TestCase
         ]);
         $response->assertStatus(201);
 
-        $response->assertJson([
-            'id' => 5,
-            'email' => 'john@example.com',
-            'amount' => 9750,
-            'ticket_quantity' => 3
+        $response->assertJsonStructure([
+            []
+        ],[
+            [
+                'id' => 7,
+                'email' => 'mousab@salah.com',
+            ],
+            [
+                'id' => 2,
+                'email' => 'mousab1@salah.com',
+            ],
+            [
+                'id' => 3,
+                'email' => 'mousab2@salah.com',
+            ],
         ]);
         // Assert
         // Make sure the customer was charged the correct amount
