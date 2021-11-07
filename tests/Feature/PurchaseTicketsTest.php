@@ -41,22 +41,11 @@ class PurchaseTicketsTest extends TestCase
         ]);
         $response->assertStatus(201);
 
-        $response->assertJsonStructure([
-            []
-        ],[
-            [
-                'id' => 7,
-                'email' => 'mousab@salah.com',
-            ],
-            [
-                'id' => 2,
-                'email' => 'mousab1@salah.com',
-            ],
-            [
-                'id' => 3,
-                'email' => 'mousab2@salah.com',
-            ],
-        ]);
+        $response->assertJson([
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'amount' => 9750
+          ]);
         // Assert
         // Make sure the customer was charged the correct amount
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
