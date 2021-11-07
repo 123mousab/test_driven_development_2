@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('concert_id');
             $table->string('email');
+            $table->integer('amount');
             $table->timestamps();
         });
     }
