@@ -83,6 +83,7 @@ class PurchaseTicketsTest extends TestCase
         $concert = Concert::factory()->unpublished()->create([
             'ticket_price' => 3250
         ]);
+        $concert->addTickets(3);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
