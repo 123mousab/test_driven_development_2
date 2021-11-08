@@ -17,9 +17,15 @@ class ReservationTest extends TestCase
      */
     public function calculating_the_total_cost()
     {
-        $concert = Concert::factory()->create(['ticket_price' => 1000])->addTickets(6);
+        /*$concert = Concert::factory()->create(['ticket_price' => 1000])->addTickets(6);
 
-        $tickets = $concert->findTickets(6);
+        $tickets = $concert->findTickets(6);*/
+
+        $tickets = collect([
+            (object) ['price' => 2000],
+            (object) ['price' => 2000],
+            (object) ['price' => 2000]
+        ]);
 
         $reservation = new Reservation($tickets);
 
