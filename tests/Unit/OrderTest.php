@@ -16,16 +16,16 @@ class OrderTest extends TestCase
     /**
      * @test
      */
-    public function creating_an_order_from_tickets_and_email()
+    public function creating_an_order_from_tickets_email_and_amount()
     {
-        $concert = Concert::factory()->create(['ticket_price' => 1200])->addTickets(5);
+        $concert = Concert::factory()->create()->addTickets(5);
         $this->assertEquals(5, $concert->ticketsRemaining());
 
-        $order = Order::forTickets($concert->findTickets(3), 'john@example.com');
+        $order = Order::forTickets($concert->findTickets(3), 'john@example.com', 6000);
 
         $this->assertEquals('john@example.com', $order->email);
         $this->assertEquals(3, $order->ticketQuantity());
-        $this->assertEquals(3600, $order->amount);
+        $this->assertEquals(6000, $order->amount);
         $this->assertEquals(2, $concert->ticketsRemaining());
     }
 
