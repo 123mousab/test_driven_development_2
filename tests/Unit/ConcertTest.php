@@ -156,6 +156,23 @@ class ConcertTest extends TestCase
 
         $this->assertCount(2, $reserveTickets);
         $this->assertEquals(1, $concert->ticketsRemaining());
+    }
 
+    /**
+     * @test
+     */
+    public function cannot_reserve_tickets_that_have_already_been_reserved()
+    {
+        $concert = Concert::factory()->create()->addTickets(3);
+        $concert->reserveTickets(2);
+
+        try {
+            $concert->reserveTickets(2);
+        }catch (NotEnoughTicketsException $exception)
+        {
+            $this->assertEquals(1, $concert->ticketsRemaining());
+        }
+
+        $this->fail('Reserving tickets succeeded even though the tickets were already reserved.');
     }
 }
