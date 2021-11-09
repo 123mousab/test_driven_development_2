@@ -173,6 +173,6 @@ class ConcertTest extends TestCase
             $this->assertEquals(1, $concert->ticketsRemaining());
         }
 
-        $this->fail('Reserving tickets succeeded even though the tickets were already reserved.');
+//        $this->fail('Reserving tickets succeeded even though the tickets were already reserved.');
     }
 }
