@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Concert;
 use App\Models\Reservation;
+use App\Models\Ticket;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -30,5 +31,26 @@ class ReservationTest extends TestCase
         $reservation = new Reservation($tickets);
 
         $this->assertEquals(6000, $reservation->totalCost());
+    }
+
+    /**
+     * @test
+     */
+    public function reserved_tickets_are_released_when_a_reservation_is_cancelled()
+    {
+        $ticket1 = \Mockery::mock(Ticket::class);
+        $ticket1->shouldReceive('release')->once();
+
+        $ticket2 = \Mockery::mock(Ticket::class);
+        $ticket2->shouldReceive('release')->once();
+
+        $ticket3 = \Mockery::mock(Ticket::class);
+        $ticket3->shouldReceive('release')->once();
+
+        $tickets = collect([$ticket1, $ticket2, $ticket3]);
+
+        $reservation = new Reservation($tickets);
+
+        $reservation->cancel();
     }
 }
