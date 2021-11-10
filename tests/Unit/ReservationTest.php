@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class ReservationTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
 
     /**
@@ -38,19 +38,20 @@ class ReservationTest extends TestCase
      */
     public function reserved_tickets_are_released_when_a_reservation_is_cancelled()
     {
-        $ticket1 = \Mockery::mock(Ticket::class);
-        $ticket1->shouldReceive('release')->once();
-
-        $ticket2 = \Mockery::mock(Ticket::class);
-        $ticket2->shouldReceive('release')->once();
-
-        $ticket3 = \Mockery::mock(Ticket::class);
-        $ticket3->shouldReceive('release')->once();
-
-        $tickets = collect([$ticket1, $ticket2, $ticket3]);
+        $tickets = collect([
+            \Mockery::spy(Ticket::class),
+            \Mockery::spy(Ticket::class),
+            \Mockery::spy(Ticket::class),
+        ]);
 
         $reservation = new Reservation($tickets);
 
         $reservation->cancel();
+
+        foreach ($tickets as $ticket)
+        {
+            $ticket->shouldHaveReceived('release');
+        }
+
     }
 }
