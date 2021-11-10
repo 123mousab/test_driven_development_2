@@ -36,6 +36,22 @@ class ReservationTest extends TestCase
     /**
      * @test
      */
+    public function retrieving_the_reservations_tickets()
+    {
+        $tickets = collect([
+            (object) ['price' => 2000],
+            (object) ['price' => 2000],
+            (object) ['price' => 2000]
+        ]);
+
+        $reservation = new Reservation($tickets);
+
+        $this->assertEquals($tickets, $reservation->tickets());
+    }
+
+    /**
+     * @test
+     */
     public function reserved_tickets_are_released_when_a_reservation_is_cancelled()
     {
         $tickets = collect([
