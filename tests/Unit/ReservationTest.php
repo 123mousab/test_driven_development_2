@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Concert;
+use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -78,6 +79,22 @@ class ReservationTest extends TestCase
         {
             $ticket->shouldHaveReceived('release');
         }
+    }
 
+    /**
+     * @test
+     */
+    public function completing_a_reservation()
+    {
+        $concert = Concert::factory()->create(['ticket_price' => 1200]);
+        $tickets = Ticket::factory()->count(3)->create(['concert_id' => $concert->id]);
+
+        $reservation = new Reservation($tickets, 'mousab@salah.com');
+
+        $order = $reservation->complete();
+
+        $this->assertEquals('mousab@salah.com', $order->email);
+        $this->assertEquals(3, $order->ticketQuantity());
+        $this->assertEquals(3600, $order->amount);
     }
 }
