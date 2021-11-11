@@ -2,8 +2,13 @@
 
 namespace Tests\Unit\Billing;
 
+use App\Billing\PaymentFailedException;
 use App\Billing\StripePaymentGateway;
 use PHPUnit\Framework\TestCase;
+
+/**
+ * @group integration
+ */
 
 class StripePaymentGatewayTest extends TestCase
 {
@@ -60,5 +65,19 @@ class StripePaymentGatewayTest extends TestCase
         // Verify that the charge was completed successfully
         $this->assertCount(1, $this->newCharges());
         $this->assertEquals(5000, $this->lastCharge()->amount);
+    }
+
+    /**
+     * @test
+     */
+    public function charges_with_an_invalid_payment_token_fail()
+    {
+        try {
+            $paymentGateway = new StripePaymentGateway($this->stripe_api_key);
+            $paymentGateway->charge(2500, 'invalid-payment_token');
+        }catch (PaymentFailedException $exception){
+            $this->assertCount(0, $this->newCharges());
+            $this->assertTrue(true);
+        }
     }
 }
