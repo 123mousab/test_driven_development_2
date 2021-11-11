@@ -15,8 +15,6 @@ class StripePaymentGatewayTest extends TestCase
         // Create a new StripePaymentGateway
         $paymentGateway = new StripePaymentGateway;
 
-//        \Stripe\Stripe::setApiKey($this->stripe_api_key);
-
         $token = \Stripe\Token::create([
             "card" => [
                 "number" => "4242424242424242",
@@ -25,12 +23,17 @@ class StripePaymentGatewayTest extends TestCase
                 "cvc" => "123"
             ]
         ], ['api_key' => $this->stripe_api_key])->id;
-        dd($token);
 
         // Create a new charge for some amount using a valid token
         $paymentGateway->charge(2500, $token);
 
 
         // Verify that the charge was completed successfully
+        $lastCharge = \Stripe\Charge::all(
+            ['limit' => 1],
+            ['api_key' => $this->stripe_api_key]
+        )['data'][0];
+
+        $this->assertEquals(2500, $lastCharge->amount);
     }
 }
