@@ -10,12 +10,18 @@ use PHPUnit\Framework\TestCase;
 class FakePaymentGatewayTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function getPaymentGateway()
+    {
+        return new FakePaymentGateway();
+    }
+
     /**
      * @test
      */
     public function charge_with_a_valid_payment_token_are_successful()
     {
-        $paymentGateway = new FakePaymentGateway();
+        $paymentGateway = $this->getPaymentGateway();
 
         $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
 

@@ -28,7 +28,8 @@ class StripePaymentGateway implements PaymentGateway
             );
         }catch (InvalidRequestException $exception)
         {
-            throw new PaymentFailedException();
+//            throw new PaymentFailedException();
+            return false;
         }
     }
 }

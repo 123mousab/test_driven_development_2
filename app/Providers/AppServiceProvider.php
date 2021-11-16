@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Billing\PaymentGateway;
+use App\Billing\StripePaymentGateway;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    private $stripe_api_key = 'sk_test_51IFf0EA6UNYC18RsKfYotpmcK9yhm95pUiLHTL8Ushu5m2D4n8THRp5AaYam5wPmYeidStqF5LKuMmqkbPh76NZn00tUx0CV64';
     /**
      * Register any application services.
      *
@@ -14,7 +17,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(StripePaymentGateway::class, function (){
+            return new StripePaymentGateway($this->stripe_api_key);
+        });
+
+        $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
     }
 
     /**

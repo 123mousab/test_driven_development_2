@@ -51,20 +51,25 @@ class StripePaymentGatewayTest extends TestCase
         ], ['api_key' => $this->stripe_api_key])->id;
     }
 
+    protected function getPaymentGateway()
+    {
+        return new StripePaymentGateway(new StripePaymentGateway($this->stripe_api_key));
+    }
+
     /**
      * @test
      */
     public function charges_with_a_valid_payment_token_are_successful()
     {
         // Create a new StripePaymentGateway
-        $paymentGateway = new StripePaymentGateway($this->stripe_api_key);
+        $paymentGateway = $this->getPaymentGateway();
 
         // Create a new charge for some amount using a valid token
-        $paymentGateway->charge(5000, $this->validToken());
+        $paymentGateway->charge(6000, $this->validToken());
 
         // Verify that the charge was completed successfully
         $this->assertCount(1, $this->newCharges());
-        $this->assertEquals(5000, $this->lastCharge()->amount);
+        $this->assertEquals(6000, $this->lastCharge()->amount);
     }
 
     /**
@@ -72,12 +77,16 @@ class StripePaymentGatewayTest extends TestCase
      */
     public function charges_with_an_invalid_payment_token_fail()
     {
-        try {
-            $paymentGateway = new StripePaymentGateway($this->stripe_api_key);
-            $paymentGateway->charge(2500, 'invalid-payment_token');
-        }catch (PaymentFailedException $exception){
-            $this->assertCount(0, $this->newCharges());
-            $this->assertTrue(true);
-        }
+//        try {
+//            $paymentGateway = new StripePaymentGateway($this->stripe_api_key);
+//            $paymentGateway->charge(2500, 'invalid-payment_token');
+//        }catch (PaymentFailedException $exception){
+//            $this->assertCount(0, $this->newCharges());
+//            $this->assertTrue(true);
+//        }
+
+        $paymentGateway = new StripePaymentGateway($this->stripe_api_key);
+        $result = $paymentGateway->charge(2500, 'invalid-payment-token');
+        $this->assertFalse($result);
     }
 }

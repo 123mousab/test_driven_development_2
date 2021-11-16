@@ -1,18 +1,23 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
+        "prod": "gulp --production",
+        "dev": "gulp watch"
     },
     "devDependencies": {
-        "axios": "^0.21",
-        "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "axios": "^0.15.2",
+        "bootstrap-sass": "^3.3.7",
+        "gulp": "^3.9.1",
+        "jquery": "^3.1.0",
+        "laravel-elixir": "^6.0.0-16",
+        "laravel-elixir-vue-2": "^0.2.0",
+        "laravel-elixir-webpack-official": "^1.0.2",
+        "lodash": "^4.16.2",
+        "vue": "^2.0.1"
+    },
+    "dependencies": {
+        "es6-promise": "^4.0.5",
+        "normalize.css": "^5.0.0",
+        "suitcss-base": "^2.0.0"
     }
 }
