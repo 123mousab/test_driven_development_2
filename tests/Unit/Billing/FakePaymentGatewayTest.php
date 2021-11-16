@@ -16,6 +16,23 @@ class FakePaymentGatewayTest extends TestCase
         return new FakePaymentGateway();
     }
 
+    /** @test */
+    function can_fetch_charges_created_during_a_callback()
+    {
+        $paymentGateway = $this->getPaymentGateway();
+        $paymentGateway->charge(2000, $paymentGateway->getValidTestToken());
+        $paymentGateway->charge(3000, $paymentGateway->getValidTestToken());
+
+        $newCharges = $paymentGateway->newChargesDuring(function ($paymentGateway) {
+            $paymentGateway->charge(4000, $paymentGateway->getValidTestToken());
+            $paymentGateway->charge(5000, $paymentGateway->getValidTestToken());
+        });
+
+        $this->assertCount(2, $newCharges);
+        $this->assertEquals(9000, $newCharges->sum());
+        $this->assertEquals([4000, 5000], $newCharges->all());
+    }
+
     /**
      * @test
      */
@@ -23,9 +40,13 @@ class FakePaymentGatewayTest extends TestCase
     {
         $paymentGateway = $this->getPaymentGateway();
 
-        $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+        $newCharges = $paymentGateway->newChargesDuring(function ($paymentGateway) {
+            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+        });
 
-        $this->assertEquals(2500, $paymentGateway->totalCharges());
+        $this->assertCount(2, $newCharges);
+        $this->assertEquals(5000, $newCharges->sum());
     }
 
     /**
