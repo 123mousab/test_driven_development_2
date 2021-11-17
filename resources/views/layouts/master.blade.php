@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@yield('title', 'TicketBeast')</title>
 
-        <link rel="stylesheet" href="{{ elixir('css/app.css') }}">
+{{--        <link rel="stylesheet" href="{{ elixir('css/app.css') }}">--}}
         @include('scripts.app')
     </head>
     <body class="bg-dark">
@@ -15,8 +15,8 @@
         </div>
 
         @stack('beforeScripts')
-        <script src="{{ elixir('js/app.js') }}"></script>
+{{--        <script src="{{ elixir('js/app.js') }}"></script>--}}
         @stack('afterScripts')
-        {{ svg_spritesheet() }}
+{{--        {{ svg_spritesheet() }}--}}
     </body>
 </html>
