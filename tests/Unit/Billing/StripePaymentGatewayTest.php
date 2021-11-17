@@ -4,6 +4,8 @@ namespace Tests\Unit\Billing;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\StripePaymentGateway;
+use Billing\PaymentGatewayContractTests;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,6 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StripePaymentGatewayTest extends TestCase
 {
+    use RefreshDatabase, PaymentGatewayContractTests;
+
     private $stripe_api_key = 'sk_test_51IFf0EA6UNYC18RsKfYotpmcK9yhm95pUiLHTL8Ushu5m2D4n8THRp5AaYam5wPmYeidStqF5LKuMmqkbPh76NZn00tUx0CV64';
 
     protected function setUp(): void
@@ -22,20 +26,6 @@ class StripePaymentGatewayTest extends TestCase
     protected function getPaymentGateway()
     {
         return new StripePaymentGateway($this->stripe_api_key);
-    }
-
-    /** @test */
-    function charges_with_a_valid_payment_token_are_successful()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-
-        // How could we make this api work?
-        $newCharges = $paymentGateway->newChargesDuring(function ($paymentGateway) {
-            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
-        });
-
-        $this->assertCount(1, $newCharges);
-        $this->assertEquals(2500, $newCharges->sum());
     }
 
     /** @test */
