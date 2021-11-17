@@ -2,6 +2,8 @@
 
 namespace Billing;
 
+use App\Billing\PaymentFailedException;
+
 trait PaymentGatewayContractTests
 {
     abstract protected function getPaymentGateway();
@@ -19,6 +21,24 @@ trait PaymentGatewayContractTests
 
         $this->assertCount(2, $newCharges);
         $this->assertEquals(5000, $newCharges->sum());
+    }
+
+    /**
+     * @test
+     */
+    public function charges_with_an_invalid_payment_token_fail()
+    {
+        $paymentGateway = $this->getPaymentGateway();
+
+        $newCharges = $paymentGateway->newChargesDuring(function ($paymentGateway) {
+            try {
+                $paymentGateway->charge(2500, 'invalid-payment-token');
+
+            } catch (PaymentFailedException $exception) {
+                $this->assertTrue(true);
+            }
+        });
+        $this->assertCount(0, $newCharges);
     }
 
     /** @test */
