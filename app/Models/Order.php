@@ -11,6 +11,11 @@ class Order extends Model
 
     protected $guarded = [];
 
+    public static function findByConfirmationNumber($confirmationNumber)
+    {
+        return self::where('confirmation_number', $confirmationNumber)->firstOrFail();
+    }
+
     public static function forTickets($tickets, $email, $amount)
     {
         $order = self::create([
