@@ -16,10 +16,10 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 //            $table->unsignedBigInteger('concert_id')->nullable();
-            $table->string('confirmation_number');
+            $table->string('confirmation_number')->nullable();
             $table->string('email');
             $table->integer('amount');
-            $table->string('card_last_four');
+            $table->string('card_last_four')->nullable();
             $table->timestamps();
         });
     }

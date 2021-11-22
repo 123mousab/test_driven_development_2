@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Billing\FakePaymentGateway;
 use App\Billing\PaymentGateway;
 use App\Models\Concert;
+use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -27,29 +28,29 @@ class PurchaseTicketsTest extends TestCase
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
-        // Arrange
-        // Create a concert
-        $concert = Concert::factory()->published()->create([
-            'ticket_price' => 3250
-        ])->addTickets(3);
-        // Act
-        // Purchase concert tickets
+        $this->withoutExceptionHandling();
+
+        $orderConfirmationNumberGenerator = \Mockery::mock(OrderConfirmationNumberGenerator::class, [
+            'generate' => 'ORDERCONFIRMATION1234',
+        ]);
+        $this->app->instance(OrderConfirmationNumberGenerator::class, $orderConfirmationNumberGenerator);
+
+        $concert = Concert::factory()->published()->create(['ticket_price' => 3250])->addTickets(3);
+
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
-            'payment_token' => $this->paymentGateway->getValidTestToken()
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
         $response->assertStatus(201);
 
         $response->assertJson([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
-            'amount' => 9750
-          ]);
-        // Assert
-        // Make sure the customer was charged the correct amount
+            'amount' => 9750,
+        ]);
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
-        // Make sure an order exists for this customer
         $this->assertTrue($concert->hasOrderFor('john@example.com'));
         $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->ticketQuantity());
     }
