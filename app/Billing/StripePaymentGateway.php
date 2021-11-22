@@ -8,6 +8,7 @@ use Stripe\Exception\InvalidRequestException;
 
 class StripePaymentGateway implements PaymentGateway
 {
+    const TEST_CARD_NUMBER = '5105105105105100';
     private $key;
 
     public function __construct($key)
@@ -18,7 +19,7 @@ class StripePaymentGateway implements PaymentGateway
     public function charge($amount, $token)
     {
         try {
-            \Stripe\Charge::create(
+            $stripeCharge = \Stripe\Charge::create(
                 [
                     'amount' => $amount,
                     'source' => $token,
@@ -26,6 +27,11 @@ class StripePaymentGateway implements PaymentGateway
                 ],
                 ['api_key' => $this->key]
             );
+
+            return new Charge([
+                'amount' => $stripeCharge['amount'],
+                'card_last_four' => $stripeCharge['payment_method_details']['card']['last4']
+            ]);
         }catch (InvalidRequestException $exception)
         {
 //            throw new PaymentFailedException();
@@ -33,11 +39,11 @@ class StripePaymentGateway implements PaymentGateway
         }
     }
 
-    public function getValidTestToken()
+    public function getValidTestToken($cardNumber = self::TEST_CARD_NUMBER)
     {
         return \Stripe\Token::create([
             "card" => [
-                "number" => "4242424242424242",
+                "number" => $cardNumber,
                 "exp_month" => 1,
                 "exp_year" => date('Y') + 1,
                 "cvc" => "123"
@@ -49,7 +55,12 @@ class StripePaymentGateway implements PaymentGateway
     {
         $latestCharge = $this->lastCharge();
         $callback($this);
-        return $this->newChargesSince($latestCharge)->pluck('amount');
+        return $this->newChargesSince($latestCharge)->map(function ($stripeCharge){
+            return new Charge([
+                'amount' => $stripeCharge['amount'],
+                'card_last_four' => $stripeCharge['payment_method_details']['card']['last4']
+            ]);
+        });
     }
 
     private function lastCharge()
