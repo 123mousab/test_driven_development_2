@@ -18,19 +18,20 @@ class Order extends Model
         return self::where('confirmation_number', $confirmationNumber)->firstOrFail();
     }
 
-    public static function forTickets($tickets, $email, $amount)
+    public static function forTickets($tickets, $email, $charge)
     {
         $order = self::create([
 //            'confirmation_number' => app(OrderConfirmationNumberGenerator::class)->generate(),
             'confirmation_number' => OrderConfirmationNumber::generate(),
             'email' => $email,
-            'amount' => $amount
+            'amount' => $charge->amount(),
+            'card_last_four' => $charge->cardLastFour(),
         ]);
-        // update the order of tickets
-        foreach ($tickets as $ticket) {
+        // update the order of ticket
+       /* foreach ($tickets as $ticket) {
             $order->tickets()->save($ticket);
-        }
-
+        }*/
+        $order->tickets()->saveMany($tickets);
         return $order;
     }
 
