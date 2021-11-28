@@ -29,6 +29,8 @@ class OrderConfirmationEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        dd('ds');
+        return $this->view('emails.order_confirmation_email')
+            ->subject("Your TicketBeast Order");
     }
 }

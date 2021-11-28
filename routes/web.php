@@ -10,7 +10,7 @@ Route::get('mockups/order', function (){
 });
 
 Route::get('/concerts/{id}', [\App\Http\Controllers\ConcertsController::class, 'show']);
-
 Route::post('/concerts/{id}/orders', [\App\Http\Controllers\ConcertsOrdersController::class, 'store']);
-
 Route::get('/orders/{confirmationNumber}', [\App\Http\Controllers\OrderController::class, 'show']);
+
+Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
