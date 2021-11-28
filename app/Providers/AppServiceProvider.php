@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Billing\HashidsTicketCodeGenerator;
 use App\Billing\PaymentGateway;
 use App\Billing\RandomOrderConfirmationNumberGenerator;
 use App\Billing\StripePaymentGateway;
 use App\OrderConfirmationNumberGenerator;
+use App\TicketCodeGenerator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,8 +25,13 @@ class AppServiceProvider extends ServiceProvider
             return new StripePaymentGateway($this->stripe_api_key);
         });
 
+        $this->app->bind(HashidsTicketCodeGenerator::class, function () {
+            return new HashidsTicketCodeGenerator(config('app.ticket_code_salt'));
+        });
+
         $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
         $this->app->bind(OrderConfirmationNumberGenerator::class, RandomOrderConfirmationNumberGenerator::class);
+        $this->app->bind(TicketCodeGenerator::class, HashidsTicketCodeGenerator::class);
     }
 
     /**
