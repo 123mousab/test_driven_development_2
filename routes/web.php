@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::get('/', function (){
+    return 'laravel';
+});
+
 Route::get('mockups/order', function (){
     return view('orders.show');
 });
@@ -14,3 +18,4 @@ Route::post('/concerts/{id}/orders', [\App\Http\Controllers\ConcertsOrdersContro
 Route::get('/orders/{confirmationNumber}', [\App\Http\Controllers\OrderController::class, 'show']);
 
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm']);
