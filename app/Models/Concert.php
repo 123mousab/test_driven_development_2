@@ -10,6 +10,11 @@ class Concert extends Model
 {
     use HasFactory;
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     protected $guarded = [];
 
     protected $dates = ['date'];
@@ -89,4 +94,15 @@ class Concert extends Model
     {
         return $this->tickets()->available()->count();
     }
+
+    public function isPublished()
+    {
+        return $this->published_at !== null;
+    }
+
+    public function publish()
+    {
+        $this->update(['published_at' => $this->freshTimestamp()]);
+    }
+
 }

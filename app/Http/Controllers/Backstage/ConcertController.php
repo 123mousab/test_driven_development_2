@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ConcertController extends Controller
 {
@@ -29,7 +30,7 @@ class ConcertController extends Controller
             'ticket_quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
-        $concert = Concert::create([
+        $concert = Auth::user()->concerts()->create([
             'title' => request('title'),
             'subtitle' => request('subtitle'),
             'date' => Carbon::parse(vsprintf('%s %s', [
@@ -44,6 +45,8 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'additional_information' => request('additional_information'),
         ])->addTickets(request('ticket_quantity'));
+
+        $concert->publish();
 
         return redirect()->route('concerts.show', $concert);
     }
