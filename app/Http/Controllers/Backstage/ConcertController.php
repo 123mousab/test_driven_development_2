@@ -12,7 +12,7 @@ class ConcertController extends Controller
 {
     public function index()
     {
-        $concerts = Concert::all();
+        $concerts = Auth::user()->concerts;
         return view('backstage.concerts.index', compact('concerts'));
     }
 
