@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ConcertController extends Controller
 {
+    public function index()
+    {
+        $concerts = Concert::all();
+        return view('backstage.concerts.index', compact('concerts'));
+    }
+
+
     public function create()
     {
         return view('backstage.concerts.create');

@@ -22,6 +22,7 @@ Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLo
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 
 Route::prefix('backstage')->middleware(['auth'])->group(function() {
+    Route::get('concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'index']);
     Route::get('concerts/new', [\App\Http\Controllers\Backstage\ConcertController::class, 'create']);
     Route::post('concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'store']);
 });
