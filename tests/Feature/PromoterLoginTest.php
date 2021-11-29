@@ -19,7 +19,7 @@ class PromoterLoginTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create([
+        $user = User::factory()->create  ([
             'email' => 'jane@example.com',
             'password' => bcrypt('123456789')
         ]);
@@ -29,7 +29,7 @@ class PromoterLoginTest extends TestCase
             'password' => '123456789'
         ]);
 
-        $response->assertRedirect('/backstage/concerts');
+        $response->assertRedirect('/backstage/concerts/new');
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
     }
@@ -66,6 +66,19 @@ class PromoterLoginTest extends TestCase
 
         $response->assertRedirect('/login');
         $response->assertSessionHasErrors(['email']);
+        $this->assertFalse(Auth::check());
+    }
+
+    /**
+     * @test
+     */
+    public function logging_out_the_current_user()
+    {
+        Auth::login(User::factory()->create());
+
+        $response = $this->post('/logout');
+
+        $response->assertRedirect('/login');
         $this->assertFalse(Auth::check());
     }
 }
