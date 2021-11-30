@@ -8,13 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 class EditConcert extends TestCase
 {
     use RefreshDatabase;
 
-    use ArraySubsetAsserts;
     private function oldAttributes($overrides = [])
     {
         return array_merge([
