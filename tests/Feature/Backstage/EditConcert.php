@@ -184,7 +184,7 @@ class EditConcert extends TestCase
             'ticket_price' => '72.50',
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(404);
         tap($concert->fresh(), function ($concert) {
             $this->assertEquals('Old title', $concert->title);
             $this->assertEquals('Old subtitle', $concert->subtitle);
@@ -215,7 +215,6 @@ class EditConcert extends TestCase
             'state' => 'Old state',
             'zip' => '00000',
             'ticket_price' => 2000,
-            'ticket_quantity' => 4,
         ]);
         $this->assertTrue($concert->isPublished());
 
@@ -231,7 +230,6 @@ class EditConcert extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
-            'ticket_quantity' => 20,
         ]);
 
         $response->assertStatus(403);
