@@ -21,9 +21,10 @@ Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login
 Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('auth.show-login');
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 
-Route::prefix('backstage')->middleware(['auth'])->group(function() {
-    Route::get('concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'index']);
-    Route::get('concerts/new', [\App\Http\Controllers\Backstage\ConcertController::class, 'create']);
-    Route::post('concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'store']);
+Route::prefix('backstage')->middleware('auth')->group(function () {
+    Route::get('/concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'index'])->name('backstage.concerts.index');
+    Route::get('/concerts/new', [\App\Http\Controllers\Backstage\ConcertController::class, 'create'])->name('backstage.concerts.new');
+    Route::post('/concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'store']);
     Route::get('/concerts/{id}/edit', [\App\Http\Controllers\Backstage\ConcertController::class, 'edit'])->name('backstage.concerts.edit');
+    Route::patch('/concerts/{id}', [\App\Http\Controllers\Backstage\ConcertController::class, 'update'])->name('backstage.concerts.update');
 });
