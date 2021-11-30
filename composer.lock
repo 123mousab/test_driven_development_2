@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af79323423eadb4e0bf39c4194e73ceb",
+    "content-hash": "4383acc899665ec4bbbfcbf91ac0c432",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5714,6 +5714,51 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "dms/phpunit-arraysubset-asserts",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rdohms/phpunit-arraysubset-asserts.git",
+                "reference": "e1b47df99cd0dbb3f63528adc5c990256218c707"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rdohms/phpunit-arraysubset-asserts/zipball/e1b47df99cd0dbb3f63528adc5c990256218c707",
+                "reference": "e1b47df99cd0dbb3f63528adc5c990256218c707",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0 || ^8.0",
+                "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "require-dev": {
+                "dms/coding-standard": "^9",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "assertarraysubset-autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Dohms",
+                    "email": "rdohms@gmail.com"
+                }
+            ],
+            "description": "This package provides ArraySubset and related asserts once deprecated in PHPUnit 8",
+            "support": {
+                "issues": "https://github.com/rdohms/phpunit-arraysubset-asserts/issues",
+                "source": "https://github.com/rdohms/phpunit-arraysubset-asserts/tree/v0.3.1"
+            },
+            "time": "2021-10-17T18:50:58+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.0",
