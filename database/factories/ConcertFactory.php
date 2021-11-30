@@ -30,6 +30,7 @@ class ConcertFactory extends Factory
             'state' => 'ON',
             'zip' => '90210',
             'additional_information' => 'Some sample additional information.',
+            'ticket_quantity' => 5
         ];
     }
 
