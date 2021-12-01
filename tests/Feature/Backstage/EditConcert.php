@@ -23,6 +23,7 @@ class EditConcert extends TestCase
             'venue' => 'Old venue',
             'venue_address' => 'Old address',
             'city' => 'Old city',
+
             'state' => 'Old state',
             'zip' => '00000',
             'ticket_price' => 2000,
