@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Concert;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -50,5 +51,12 @@ class ConcertFactory extends Factory
                 'published_at' => null
             ];
         });
+    }
+
+    public static function createPublished($overrides = [])
+    {
+        $concert = Concert::factory()->create($overrides);
+        $concert->publish();
+        return $concert;
     }
 }
