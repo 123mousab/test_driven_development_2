@@ -59,4 +59,9 @@ class ConcertFactory extends Factory
         $concert->publish();
         return $concert;
     }
+
+    public static function createUnpublished($overrides = [])
+    {
+        return Concert::factory()->unpublished()->create($overrides);
+    }
 }

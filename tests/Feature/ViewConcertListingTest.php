@@ -12,6 +12,7 @@ class ViewConcertListingTest extends TestCase
 {
     use RefreshDatabase;
 
+
     /**
      * @test
      */
