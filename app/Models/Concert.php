@@ -106,4 +106,8 @@ class Concert extends Model
         $this->addTickets($this->ticket_quantity);
     }
 
+    public function ticketsSold()
+    {
+        return $this->tickets()->sold()->count();
+    }
 }

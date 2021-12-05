@@ -27,6 +27,7 @@ Route::prefix('backstage')->middleware('auth')->group(function () {
     Route::post('/concerts', [\App\Http\Controllers\Backstage\ConcertController::class, 'store']);
     Route::get('/concerts/{id}/edit', [\App\Http\Controllers\Backstage\ConcertController::class, 'edit'])->name('backstage.concerts.edit');
     Route::patch('/concerts/{id}', [\App\Http\Controllers\Backstage\ConcertController::class, 'update'])->name('backstage.concerts.update');
-    Route::post('/published-concerts', [\App\Http\Controllers\Backstage\PublishedConcertsController::class, 'store'])->name('backstage.published-concerts.store');
+    Route::post('/published_concerts', [\App\Http\Controllers\Backstage\PublishedConcertsController::class, 'store'])->name('backstage.published-concerts.store');
+    Route::get('/published_concerts/{id}/orders', [\App\Http\Controllers\Backstage\PublishedConcertOrdersController::class, 'index'])->name('backstage.published.index');
 });
 

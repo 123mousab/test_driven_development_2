@@ -43,4 +43,9 @@ class Ticket extends Model
     {
         return $this->concert->ticket_price;
     }
+
+    public function scopeSold($query)
+    {
+        return $query->whereNotNull('order_id');
+    }
 }
