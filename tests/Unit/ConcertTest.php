@@ -124,6 +124,18 @@ class ConcertTest extends TestCase
         $this->assertEquals(60.00, $concert->percentSoldOut());
     }
 
+    /** @test */
+    function calculating_the_revenue_in_dollars()
+    {
+        $concert = Concert::factory()->create();
+        $orderA = Order::factory()->create(['amount' => 3850]);
+        $orderB = Order::factory()->create(['amount' => 9625]);
+        $concert->tickets()->saveMany(Ticket::factory()->count(2)->create(['order_id' => $orderA->id]));
+        $concert->tickets()->saveMany(Ticket::factory()->count(5)->create(['order_id' => $orderB->id]));
+
+        $this->assertEquals(134.75, $concert->revenueInDollars());
+    }
+
     /**
      * @test
      */
