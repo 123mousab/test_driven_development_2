@@ -7,6 +7,7 @@ use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ConcertController extends Controller
 {
@@ -36,6 +37,7 @@ class ConcertController extends Controller
             'zip' => ['required'],
             'ticket_price' => ['required', 'numeric', 'min:5'],
             'ticket_quantity' => ['required', 'numeric', 'min:1'],
+            'poster_image' => ['nullable', 'image', Rule::dimensions()->minWidth(500)->ratio(8.5/11)],
         ]);
 
         $concert = Auth::user()->concerts()->create([
