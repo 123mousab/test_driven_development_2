@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
 use App\Models\Concert;
+use App\Models\NullFile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +56,7 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
             'ticket_quantity' => (int) request('ticket_quantity'),
-            'poster_image_path' => request('poster_image')->store('posters', 's3'),
+            'poster_image_path' => request('poster_image', new NullFile)->store('posters', 's3'),
         ]);
 
 //        $concert->publish();
