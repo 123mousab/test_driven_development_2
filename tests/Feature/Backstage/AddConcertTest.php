@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Backstage;
 
+use App\Events\ConcertAdded;
 use App\Models\Concert;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -385,7 +387,7 @@ class AddConcertTest extends TestCase
     /** @test */
     function poster_image_is_uploaded_if_included()
     {
-        Storage::fake('s3');
+        Storage::fake('public');
         $user = User::factory()->create();
         $file = File::image('mousab.png', 850, 1100);
 
@@ -395,10 +397,10 @@ class AddConcertTest extends TestCase
 
         tap(Concert::first(), function ($concert) use ($file) {
             $this->assertNotNull($concert->poster_image_path);
-            Storage::disk('s3')->assertExists($concert->poster_image_path);
+            Storage::disk('public')->assertExists($concert->poster_image_path);
             $this->assertFileEquals(
                 $file->getPathname(),
-                Storage::disk('s3')->path($concert->poster_image_path)
+                Storage::disk('public')->path($concert->poster_image_path)
             );
         });
     }
@@ -406,7 +408,7 @@ class AddConcertTest extends TestCase
     /** @test */
     function poster_image_must_be_an_image()
     {
-        Storage::fake('s3');
+        Storage::fake('public');
         $user = User::factory()->create();
         $file = File::create('not-a-poster.pdf');
 
@@ -420,11 +422,11 @@ class AddConcertTest extends TestCase
     }
 
     /** @test */
-    function poster_image_must_be_at_least_400px_wide()
+    function poster_image_must_be_at_least_600px_wide()
     {
-        Storage::fake('s3');
+        Storage::fake('public');
         $user = User::factory()->create();
-        $file = File::image('poster.png', 399, 516);
+        $file = File::image('poster.png', 599, 775);
 
         $response = $this->actingAs($user)->from('/backstage/concerts/new')->post('/backstage/concerts', $this->validParams([
             'poster_image' => $file,
@@ -438,7 +440,7 @@ class AddConcertTest extends TestCase
     /** @test */
     function poster_image_must_have_letter_aspect_ratio()
     {
-        Storage::fake('s3');
+        Storage::fake('public');
         $user = User::factory()->create();
         $file = File::image('sa.png', 700, 1100);
 
@@ -466,6 +468,22 @@ class AddConcertTest extends TestCase
             $this->assertTrue($concert->user->is($user));
 
             $this->assertNull($concert->poster_image_path);
+        });
+    }
+
+    /** @test */
+    function an_event_is_fired_when_a_concert_is_added()
+    {
+        $this->withoutExceptionHandling();
+
+        Event::fake([ConcertAdded::class]);
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams());
+
+        Event::assertDispatched(ConcertAdded::class, function ($event) {
+            $concert = Concert::firstOrFail();
+            return $event->concert->is($concert);
         });
     }
 }

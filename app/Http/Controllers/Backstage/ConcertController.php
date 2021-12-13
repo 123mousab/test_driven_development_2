@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backstage;
 
+use App\Events\ConcertAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Concert;
 use App\Models\NullFile;
@@ -38,7 +39,7 @@ class ConcertController extends Controller
             'zip' => ['required'],
             'ticket_price' => ['required', 'numeric', 'min:5'],
             'ticket_quantity' => ['required', 'numeric', 'min:1'],
-            'poster_image' => ['nullable', 'image', Rule::dimensions()->minWidth(500)->ratio(8.5/11)],
+            'poster_image' => ['nullable', 'image', Rule::dimensions()->minWidth(600)->ratio(8.5/11)],
         ]);
 
         $concert = Auth::user()->concerts()->create([
@@ -56,9 +57,10 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
             'ticket_quantity' => (int) request('ticket_quantity'),
-            'poster_image_path' => request('poster_image', new NullFile)->store('posters', 's3'),
+            'poster_image_path' => request('poster_image', new NullFile)->store('posters', 'public'),
         ]);
 
+        ConcertAdded::dispatch($concert);
 //        $concert->publish();
 
         return redirect()->route('concerts.show', $concert);
